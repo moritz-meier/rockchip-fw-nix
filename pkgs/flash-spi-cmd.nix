@@ -8,16 +8,14 @@
   bin,
 }:
 writeShellScript "${name}-flash-spi.sh" ''
-  alias rkdeveloptool="${rkdeveloptool}/bin/rkdeveloptool"
+  ${rkdeveloptool}/bin/rkdeveloptool db ${loader}
+  ${rkdeveloptool}/bin/rkdeveloptool ef
 
-  rkdeveloptool db ${loader}
-  rkdeveloptool ef
-
-  rkdeveloptool rd
+  ${rkdeveloptool}/bin/rkdeveloptool rd
   sleep 2
 
-  rkdeveloptool db ${loader}
-  rkdeveloptool wl 0 ${bin}
+  ${rkdeveloptool}/bin/rkdeveloptool db ${loader}
+  ${rkdeveloptool}/bin/rkdeveloptool wl 0 ${bin}
 
-  rkdeveloptool rd
+  ${rkdeveloptool}/bin/rkdeveloptool rd
 ''
