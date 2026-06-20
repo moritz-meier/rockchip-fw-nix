@@ -17,7 +17,6 @@
 
   uboot-src,
 }:
-
 {
   defconfig,
   deviceTree ? null,
@@ -33,12 +32,10 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   name = "uboot-${defconfig}";
-  # version = finalAttrs.src.rev;
 
   inherit src;
 
   nativeBuildInputs = [
-    bear
     bison
     dtc
     flex
@@ -92,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   buildPhase = ''
     runHook preBuild
 
-    bear -- make ${(lib.strings.escapeShellArgs makeFlags)} -j $NIX_BUILD_CORES
+    make ${(lib.strings.escapeShellArgs makeFlags)} -j $NIX_BUILD_CORES
 
     runHook postBuild
   '';
@@ -102,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     mkdir $out
     cp -r ./$KBUILD_OUTPUT/. $out/
-    cp ./compile_commands.json $out/
 
     runHook postInstall
   '';

@@ -1,12 +1,12 @@
 {
   stdenvNoCC,
+
   rkbin-src,
 }:
 {
-  rkTrustConfig ? "RK3588TRUST.ini",
+  rkTrustConfig,
   src ? rkbin-src,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: rec {
   name = "rkbin-bl31";
 

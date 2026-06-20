@@ -1,6 +1,5 @@
 { uboot }:
-
-(uboot { defconfig = "tools-only_defconfig"; }).overrideAttrs (
+(uboot.build { defconfig = "tools-only_defconfig"; }).overrideAttrs (
   final: prev: {
     installPhase = ''
       mkdir -p $out/bin

@@ -13,10 +13,8 @@
   src ? tfa-src,
   outputFiles ? { },
 }:
-
 stdenv.mkDerivation (finalAttrs: rec {
   name = "trusted-firmware-a-${plat}";
-  version = src.rev;
 
   inherit src;
 
@@ -62,8 +60,6 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   dontFixup = true;
 
-  passthru = {
-    elf = "${finalAttrs.finalPackage.out}/${plat}/release/bl31/bl31.elf";
-  }
-  // (lib.attrsets.mapAttrs (name: value: "${finalAttrs.finalPackage.out}/${value}") outputFiles);
+  passthru =
+    { } // (lib.attrsets.mapAttrs (name: value: "${finalAttrs.finalPackage.out}/${value}") outputFiles);
 })

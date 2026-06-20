@@ -6,9 +6,10 @@
   nasm,
   libuuid,
   stdenv,
+
+  edk2-src,
 }:
 {
-  src,
   dsc,
   buildConfig ? "RELEASE",
   edk2Path ? ".",
@@ -17,9 +18,9 @@
   extraBaseToolsMakeFlags ? [ ],
   extraBuildFlags ? [ ],
   extraPatches ? [ ],
+  src ? edk2-src,
   outputFiles ? { },
 }:
-
 let
   targetArch =
     if stdenv.hostPlatform.isi686 then
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     dtc
     nasm
     # https://github.com/NixOS/nixpkgs/issues/305858
-    (buildPackages.python3.withPackages (pyPkgs: with pyPkgs; [ ]))
+    (buildPackages.python3.withPackages (pyPkgs: [ ]))
   ];
 
   buildInputs = [ libuuid ];
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     "${gccPrefix}_${targetArch}_PREFIX" = "${stdenv.cc.targetPrefix}";
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    NIX_CFLAGS_COMPILE = "-std=gnu11";
   };
 
   hardeningDisable = [

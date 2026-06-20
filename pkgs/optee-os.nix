@@ -13,82 +13,82 @@
   src ? optee-src,
   outputFiles ? { },
 }:
+let
+  optee = stdenv.mkDerivation (finalAttrs: rec {
+    name = "optee-os-${plat}";
 
-stdenv.mkDerivation (finalAttrs: rec {
-  name = "optee-os-${plat}";
-  version = src.rev;
+    inherit src;
 
-  inherit src;
+    nativeBuildInputs = [
+      dtc
+      # https://github.com/NixOS/nixpkgs/issues/305858
+      (buildPackages.python3.withPackages (
+        p: with p; [
+          pyelftools
+          cryptography
+        ]
+      ))
+    ];
 
-  nativeBuildInputs = [
-    dtc
-    # https://github.com/NixOS/nixpkgs/issues/305858
-    (buildPackages.python3.withPackages (
-      p: with p; [
-        pyelftools
-        cryptography
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+    makeFlags =
+      let
+        targetArch =
+          {
+            "arm" = "ta_arm32";
+            "arm64" = "ta_arm64";
+          }
+          .${stdenv.hostPlatform.linuxArch};
+
+        inherit (stdenv.hostPlatform) is32bit is64bit;
+      in
+      [
+        "PLATFORM=${plat}"
+        "CFG_USER_TA_TARGETS=${targetArch}"
+        "O=./build"
       ]
-    ))
-  ];
+      ++ (lib.optionals is32bit [
+        "CFG_ARM32_core=y"
+        "CROSS_COMPILE32=${stdenv.cc.targetPrefix}"
+      ])
+      ++ (lib.optionals is64bit [
+        "CFG_ARM64_core=y"
+        "CROSS_COMPILE64=${stdenv.cc.targetPrefix}"
+      ])
+      ++ extraMakeFlags;
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+    patches = [ ] ++ extraPatches;
 
-  makeFlags =
-    let
-      targetArch =
-        {
-          "arm" = "ta_arm32";
-          "arm64" = "ta_arm64";
-        }
-        .${stdenv.hostPlatform.linuxArch};
+    postPatch = ''
+      patchShebangs $(find -type d -name scripts -printf '%p ')
+    '';
 
-      inherit (stdenv.hostPlatform) is32bit is64bit;
-    in
-    [
-      "PLATFORM=${plat}"
-      "CFG_USER_TA_TARGETS=${targetArch}"
-      "O=./build"
-    ]
-    ++ (lib.optionals is32bit [
-      "CFG_ARM32_core=y"
-      "CROSS_COMPILE32=${stdenv.cc.targetPrefix}"
-    ])
-    ++ (lib.optionals is64bit [
-      "CFG_ARM64_core=y"
-      "CROSS_COMPILE64=${stdenv.cc.targetPrefix}"
-    ])
-    ++ extraMakeFlags;
+    dontConfigure = true;
 
-  patches = [ ] ++ extraPatches;
+    buildPhase = ''
+      runHook preBuild
 
-  postPatch = ''
-    patchShebangs $(find -type d -name scripts -printf '%p ')
-  '';
+      make ${(lib.strings.escapeShellArgs makeFlags)} -j $NIX_BUILD_CORES
 
-  dontConfigure = true;
+      runHook postBuild
+    '';
 
-  buildPhase = ''
-    runHook preBuild
+    installPhase = ''
+      runHook preInstall
 
-    make ${(lib.strings.escapeShellArgs makeFlags)} -j $NIX_BUILD_CORES
+      mkdir $out
+      cp -r ./build/. $out/
 
-    runHook postBuild
-  '';
+      runHook postInstall
+    '';
 
-  installPhase = ''
-    runHook preInstall
+    dontFixup = true;
 
-    mkdir $out
-    cp -r ./build/. $out/
-
-    runHook postInstall
-  '';
-
-  dontFixup = true;
-
-  passthru = {
-    elf = "${finalAttrs.finalPackage.out}/core/tee.elf";
-    bin = "${finalAttrs.finalPackage.out}/core/tee.bin";
-  }
-  // (lib.attrsets.mapAttrs (name: value: "${finalAttrs.finalPackage.out}/${value}") outputFiles);
-})
+    passthru = {
+      devkit = "${finalAttrs.out}/export-ta_arm64";
+    }
+    // (lib.attrsets.mapAttrs (name: value: "${finalAttrs.finalPackage.out}/${value}") outputFiles);
+  });
+in
+optee

@@ -3,10 +3,9 @@
   rkbin-src,
 }:
 {
-  rkBootConfig ? "RK3588MINIALL.ini",
+  rkBootConfig,
   src ? rkbin-src,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: rec {
   name = "rkbin-tpl";
 
