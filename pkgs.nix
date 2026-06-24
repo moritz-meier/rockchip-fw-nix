@@ -53,6 +53,14 @@ final: prev: {
     hash = "sha256-LobC22bYpHVGZd5G8IugfcmHacVaHH0aNe3zQG7LJv0=";
   };
 
+  uboot-collabora-src = prev.fetchFromGitLab {
+    domain = "gitlab.collabora.com";
+    owner = "hardware-enablement";
+    repo = "rockchip-3588/u-boot";
+    rev = "rockchip";
+    hash = "sha256-SAMN2vWgE0wKEP9QgYHluvU9WF9gY9Sq3vPIURZIVCo=";
+  };
+
   edk2-src = prev.fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
