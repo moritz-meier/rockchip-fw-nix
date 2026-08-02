@@ -42,18 +42,13 @@
 
       devShells.${system} = {
         default = pkgs.mkShell {
-          packages = [
-            pkgs.pkgsCross.aarch64-multiplatform.stdenv.cc
+          packages = with pkgs; [
+            binwalk
+            dtc
+            rkdeveloptool
+            uboot.tools
 
-            pkgs.qemu_full
-            pkgs.binwalk
-            pkgs.dtc
-            pkgs.hexyl
-            pkgs.gptfdisk
-
-            pkgs.uboot.tools
-
-            pkgs.rkdeveloptool
+            pkgsCross.aarch64-multiplatform.stdenv.cc
           ];
         };
       };
