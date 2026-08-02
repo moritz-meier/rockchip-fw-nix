@@ -28,6 +28,17 @@
   optee = pkgsCross.aarch64-multiplatform.optee.build {
     plat = "rockchip-rk3588";
 
+    extraMakeFlags = [
+      # "CFG_TEE_CORE_LOG_LEVEL=4"
+      # "CFG_EARLY_CONSOLE=y"
+      # "CFG_TEE_CORE_DEBUG=y"
+
+      "CFG_CORE_RESERVED_SHM=n"
+      "CFG_CORE_DYN_SHM=y"
+      "CFG_DRAM_BASE=0x00000000"
+      "CFG_DRAM_SIZE=0xf0000000"
+    ];
+
     outputFiles = {
       bin = "core/tee.bin";
     };
