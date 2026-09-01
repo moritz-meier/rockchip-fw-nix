@@ -19,12 +19,12 @@ final: prev: {
     tools = prev.callPackage ./pkgs/uboot-tools.nix { };
   };
 
-  edk2 = {
-    build = prev.callPackage ./pkgs/edk2.nix { };
-  };
-
   rockchip = {
     mkFlashScript = prev.callPackage ./pkgs/flash-spi-cmd.nix { };
+  };
+
+  edk2 = {
+    build = prev.callPackage ./pkgs/edk2.nix { };
   };
 
   rkbin-src = prev.fetchFromGitHub {
@@ -34,16 +34,37 @@ final: prev: {
     hash = "sha256-U8d2cH6/TSXfBnLhh141A9wP/t6prFgwYMvwgXBf4vc=";
   };
 
-  tfa-src = final.fetchgit {
+  tfa-src = prev.fetchgit {
     url = "https://review.trustedfirmware.org/TF-A/trusted-firmware-a";
     rev = "lts-v2.14.2";
     hash = "sha256-PaSx0gmbZe8KGGvafVo/xwSdGhZeW4/urSwZ7nipQoE=";
   };
 
-  optee-src = final.fetchgit {
+  optee-src = prev.fetchgit {
     url = "https://review.trustedfirmware.org/OP-TEE/optee_os";
     rev = "4.10.0";
     hash = "sha256-hdEvydnwn4VuImNvQ7exnB/f8AoxGMLadLh0S1gvXUc=";
+  };
+
+  optee-examples-src = prev.fetchFromGitHub {
+    owner = "linaro-swg";
+    repo = "optee_examples";
+    rev = "4.10.0";
+    hash = "sha256-8SaicPUvU5lSJeSOhmd8L3bRiRpQrHteoYAoPmNpLJ8=";
+  };
+
+  optee-ftpm-src = prev.fetchFromGitHub {
+    owner = "OP-TEE";
+    repo = "optee_ftpm";
+    rev = "4.10.0";
+    hash = "sha256-WGEpDd+yokJinTFtN7W6phUZHxBoRaJq+hvmSsY3HXU=";
+  };
+
+  ms-tpm-20-ref-src = prev.fetchFromGitHub {
+    owner = "microsoft";
+    repo = "ms-tpm-20-ref";
+    rev = "98b60a44aba79b15fcce1c0d1e46cf5918400f6a";
+    hash = "sha256-s3VbhbFCcnXiZ+QZfC7b9Sw+ribYHNPEMcx8db9t09Q=";
   };
 
   uboot-src = prev.fetchFromGitHub {
@@ -64,8 +85,8 @@ final: prev: {
   edk2-src = prev.fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
-    rev = "refs/heads/master";
-    hash = "sha256-EhqHz/PPsRj/bOqYqMbSQ3J+EFP2xnYSKylBz/3HgIo=";
+    rev = "edk2-stable202605";
+    hash = "sha256-sUqLocdX7lxN2pEdn84Cjh8pOzYqIeKqO144XhwKA30=";
 
     fetchSubmodules = true;
   };
@@ -74,7 +95,7 @@ final: prev: {
     owner = "edk2-porting";
     repo = "edk2-rk3588";
     rev = "refs/heads/master";
-    hash = "sha256-Z1Klt0eQwiwkI2e6c6C+hDG7HM2/Mj+2kY8zmnsnGBg=";
+    hash = "";
 
     fetchSubmodules = true;
   };

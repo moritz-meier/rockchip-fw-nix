@@ -27,15 +27,9 @@
     in
     {
       packages.${system} = {
-        opi5plus-uboot = pkgs.rockchip-boards.orangepi-5-plus.uboot;
-        opi5plus-edk2 = pkgs.rockchip-boards.orangepi-5-plus.edk2;
-        opi5plus-flash = pkgs.rockchip-boards.orangepi-5-plus.flash-script;
 
-        qemu-virt-uboot = pkgs.rockchip-boards.qemu-virt.uboot;
-        qemu-virt-uboot-vm = pkgs.rockchip-boards.qemu-virt.uboot-vm;
-
-        qemu-virt-edk2 = pkgs.rockchip-boards.qemu-virt.edk2;
-        qemu-virt-edk2-vm = pkgs.rockchip-boards.qemu-virt.edk2-vm;
+        opi5plus = pkgs.rockchip-boards.orangepi-5-plus;
+        qemu-virt = pkgs.rockchip-boards.qemu-virt;
 
         uboot-tools = pkgs.pkgsCross.aarch64-multiplatform.uboot.tools;
       };
