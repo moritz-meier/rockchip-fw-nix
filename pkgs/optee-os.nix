@@ -7,7 +7,7 @@
   optee-src,
   optee-examples-src,
   optee-ftpm-src,
-  ms-tpm-ref-src,
+  ms-tpm-20-ref-src,
 }:
 {
   plat,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     optee-src
     optee-examples-src
     optee-ftpm-src
-    ms-tpm-ref-src
+    ms-tpm-20-ref-src
   ];
 
   nativeBuildInputs = [
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     popd
 
     pushd ./optee-ftpm
-    make ${(lib.strings.escapeShellArgs makeFlags)} CFG_MS_TPM_20_REF=${ms-tpm-ref-src} TA_DEV_KIT_DIR=../optee-os/build/export-ta_arm64 -j $NIX_BUILD_CORES
+    make ${(lib.strings.escapeShellArgs makeFlags)} CFG_MS_TPM_20_REF=${ms-tpm-20-ref-src} TA_DEV_KIT_DIR=../optee-os/build/export-ta_arm64 -j $NIX_BUILD_CORES
     popd
 
     pushd ./optee-os
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     runHook preInstall
 
     mkdir $out
-    cp -r ./. $out/
+    cp -r ./optee-os/build/. $out/
 
     runHook postInstall
   '';
