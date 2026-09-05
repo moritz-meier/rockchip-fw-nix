@@ -1,7 +1,7 @@
 {
   pkgsCross,
-  writeScript,
   qemu_full,
+  writeScript,
 
   finalBoard,
 }:

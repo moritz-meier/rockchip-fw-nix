@@ -23,9 +23,9 @@ final: prev: {
     mkFlashScript = prev.callPackage ./pkgs/flash-spi-cmd.nix { };
   };
 
-  edk2 = {
-    build = prev.callPackage ./pkgs/edk2.nix { };
-  };
+  # edk2 = {
+  #   build = prev.callPackage ./pkgs/edk2.nix { };
+  # };
 
   rkbin-src = prev.fetchFromGitHub {
     owner = "rockchip-linux";
