@@ -71,10 +71,18 @@
     };
   };
 
-  flash-script = rockchip.mkFlashScript {
-    name = "orangepi-5-plus-flash-script";
+  flash-spi-script = rockchip.mkFlashScript {
+    name = "orangepi-5-plus";
+    target = "spi";
     loader = finalBoard.rkbin-loader.bin;
     bin = finalBoard.uboot.boot-spi-bin;
+  };
+
+  flash-emmc-script = rockchip.mkFlashScript {
+    name = "orangepi-5-plus";
+    target = "emmc";
+    loader = finalBoard.rkbin-loader.bin;
+    bin = finalBoard.uboot.boot-bin;
   };
 
   # edk2 =

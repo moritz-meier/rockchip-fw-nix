@@ -20,7 +20,7 @@ final: prev: {
   };
 
   rockchip = {
-    mkFlashScript = prev.callPackage ./pkgs/flash-spi-cmd.nix { };
+    mkFlashScript = prev.callPackage ./pkgs/flash-script.nix { };
   };
 
   # edk2 = {
